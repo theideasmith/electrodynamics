@@ -16,6 +16,11 @@ class AnimatedScatter(object):
         # Then setup FuncAnimation.
         self.ani = animation.FuncAnimation(self.fig, self.update, interval=5,
                                            init_func=self.setup_plot, blit=True)
+                                                   # Set up formatting for the movie files
+        Writer = animation.writers['ffmpeg']
+        writer = Writer(fps=30, metadata=dict(artist='Me'), bitrate=1800)
+
+        self.ani.save('video.mp4', writer=writer)
 
     def setup_plot(self):
         """Initial drawing of the scatter plot."""
@@ -60,7 +65,29 @@ class AnimatedScatter(object):
 
     def show(self):
         plt.show()
-yf = np.load("simulation.npy")
-tf = yf.shape[0]
-a = AnimatedScatter(yf,numpoints=tf)
-a.show()
+yf = np.load("../data/simulation.npy")
+n = yf.shape[1]/2
+fig = plt.figure()
+ax = fig.add_subplot(111)
+for i in range(n):
+  xs = yf[:,i,0]
+  ys = yf[:,i,1]
+
+  ax.plot(xs[1], ys[1], 'gv')
+  ax.plot(xs[-1], ys[-1], 'rv')
+  ax.plot(xs, ys)
+
+  
+xs = yf[:, :n, 0] 
+ys = yf[:, :n, 1] 
+maxx = np.max(xs) + 20                  
+minx = np.min(xs) - 20                  
+maxy = np.max(ys) + 20                  
+miny = np.min(ys) - 20                  
+ax.set_ylim(ymax=maxy,ymin=miny)   
+ax.set_xlim(xmin=minx, xmax=maxx)  
+plt.savefig("figure-1.jpg")
+plt.show()
+#tf = yf.shape[0]
+#a = AnimatedScatter(yf,numpoints=tf)
+#a.show()

@@ -1,0 +1,4 @@
+cd ../src
+
+python particlesim.py
+python generate_animation.py

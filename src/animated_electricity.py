@@ -5,7 +5,7 @@ from matplotlib.figure import Figure
 from matplotlib.backends.backend_qt4agg import FigureCanvasQTAgg as FigureCanvas
 import skvideo.io
 
-def fig2data ( fig ):
+def fig2data (fig):
    """
    @brief Convert a Matplotlib figure to a 4D numpy array with RGBA channels and return it
    @param fig a matplotlib figure
@@ -72,7 +72,7 @@ class Monitor(FigureCanvas):
 from electricity import *
 if __name__=="__main__":
   app = QtGui.QApplication(sys.argv)
-  w = Monitor(yf, t_f, "./video.mp4")
+  w = Monitor(yf, t_f, "../product/video.mp4")
   w.setWindowTitle("{} Electrical Particle Dynamics".format(r.shape[0]))
   w.show()
   sys.exit(app.exec_())
