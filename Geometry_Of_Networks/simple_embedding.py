@@ -53,14 +53,12 @@ import matplotlib.pyplot as plt
 import networkx as nx
 import numpy.ma as ma
 from scipy.integrate import odeint
+import cv2
 
 
 import matplotlib.cm as cm
 
 import os
-import sys
-import numpy as np
-import scipy.stats
 
 sys.path.append('../src/')
 import data_config  as dc
@@ -76,12 +74,8 @@ for a graph embedded in three dimensions is
 zero
 """
 
-import numpy as np
-import numpy.ma as ma
-from scipy.integrate import odeint
-import cv2
 
-def get_dr(y):
+def mutual_distance_vectors(y):
     n = y.shape[0]
     # rj across, ri down
     rs_from = np.tile(y, (n,1,1))
@@ -92,9 +86,10 @@ def get_dr(y):
     dr = rs_to - rs_from
     dr = dr.astype(np.float32)
     return dr
-def get_radii(y):
 
-    dR = get_dr(y)
+def mutual_distances(y):
+
+    dR = mutual_distance_vectors(y)
     R = np.array(
       np.power(
         np.sum(np.power(dR, 2.), axis=2),
@@ -102,6 +97,15 @@ def get_radii(y):
       )
     ).astype(np.float32)
     return R
+
+def layout_energy(y, k, adjacency):
+    assert y.shape[0] == adjacency.shape[0]
+    R = mutual_distances(y)
+    assert R.shape == adjacency.shape
+
+    dx = 0.5*np.triu(k*(R-adjacency))**2
+    return np.sum(dx)
+
 
 def spring_layout(y,t,w,k,n,d,T):
   """
@@ -113,7 +117,7 @@ def spring_layout(y,t,w,k,n,d,T):
   y = np.copy(y.reshape((n*2,d)))
   x = y[:n]
   v = y[n:]
-  dR = get_dr(x)
+  dR = mutual_distance_vectors(x)
 
   # F=0 <=> R=w
   # we also add a damping term

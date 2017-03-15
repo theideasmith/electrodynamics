@@ -77,15 +77,15 @@ for i in range(n):
   ax.plot(xs[-1], ys[-1], 'rv')
   ax.plot(xs, ys)
 
-  
-xs = yf[:, :n, 0] 
-ys = yf[:, :n, 1] 
-maxx = np.max(xs) + 20                  
-minx = np.min(xs) - 20                  
-maxy = np.max(ys) + 20                  
-miny = np.min(ys) - 20                  
-ax.set_ylim(ymax=maxy,ymin=miny)   
-ax.set_xlim(xmin=minx, xmax=maxx)  
+
+xs = yf[:, :n, 0]
+ys = yf[:, :n, 1]
+maxx = np.max(xs) + 20
+minx = np.min(xs) - 20
+maxy = np.max(ys) + 20
+miny = np.min(ys) - 20
+ax.set_ylim(ymax=maxy,ymin=miny)
+ax.set_xlim(xmin=minx, xmax=maxx)
 plt.savefig("figure-1.jpg")
 plt.show()
 #tf = yf.shape[0]
